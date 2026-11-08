@@ -1,0 +1,62 @@
+---
+title: "Astro에서 React 컴포넌트 사용하기"
+description: "Astro 페이지에 React 컴포넌트를 넣고 브라우저에서 동작시키기."
+publishedAt: 2026-11-08
+tags: ["Astro", "React"]
+draft: false
+---
+
+## Astro에서 React를 사용하는 이유
+
+이 블로그는 글과 레이아웃을 Astro로 구성하고,
+상태와 사용자 조작이 필요한 UI에는 React를 사용할 계획이다.
+
+프로젝트의 배경은 [Astro로 기술 블로그를 시작한 이유](/posts/why-astro/)에 정리했다.
+
+## React 컴포넌트 작성
+
+카운터처럼 상태가 필요한 컴포넌트는 익숙한 React 방식으로 작성한다.
+
+```tsx
+// src/components/Counter.tsx
+import { useState } from "react";
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button onClick={() => setCount((value) => value + 1)}>
+      클릭 횟수: {count}
+    </button>
+  );
+}
+```
+
+`useState`와 이벤트 핸들러를 사용하는 방식은 일반적인 React 코드와 같다.
+
+## Astro 페이지에 연결
+
+작성한 컴포넌트를 `.astro` 파일에서 가져와 사용한다.
+
+```astro
+---
+import Counter from "../components/Counter";
+---
+
+<h1>React 컴포넌트 예제</h1>
+<Counter client:load />
+```
+
+여기서 `client:load`는 페이지가 로드될 때
+브라우저에서 컴포넌트를 동작시키기 위한 지시자다.
+
+이 설정을 생략하면 기본적으로 HTML은 출력되지만,
+카운터의 클릭 이벤트는 동작하지 않는다.
+
+## 블로그에 적용할 부분
+
+본문과 제목처럼 정적인 내용은 Astro로 출력하고,
+검색창이나 문서 그래프처럼 상호작용이 필요한 부분에 React를 활용하려고 한다.
+
+먼저 작은 컴포넌트로 동작 방식을 익힌 뒤,
+필요한 기능부터 하나씩 추가할 예정이다.

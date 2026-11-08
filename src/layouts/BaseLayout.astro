@@ -1,0 +1,26 @@
+---
+interface Props {
+    title: string;
+    description?: string;
+}
+
+const {
+    title,
+    description = "호기심으로 탐구하고 지식을 연결하는 기술 블로그",
+} = Astro.props;
+---
+
+<html lang="ko">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <meta name="description" content={description} />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <title>{title}</title>
+    </head>
+
+    <body>
+        <slot />
+    </body>
+</html>

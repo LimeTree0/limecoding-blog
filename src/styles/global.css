@@ -1,0 +1,74 @@
+:root {
+    --color-background: #f6f5ed;
+    --color-text: #233027;
+    --color-accent: #b8e34b;
+    --color-green: #739675;
+    --color-orange: #f6a45d;
+
+    --font-body: "Noto Sans KR", sans-serif;
+    --font-heading: "Noto Serif KR", serif;
+    --font-code: "JetBrains Mono", monospace;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 2;
+    overflow-wrap: anywhere;
+}
+
+h1,
+h2 {
+    font-family: var(--font-heading);
+    line-height: 1.5;
+    word-break: keep-all;
+}
+
+a {
+    color: inherit;
+    text-underline-offset: 0.25em;
+}
+
+a:hover {
+    text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+}
+
+::selection {
+    background: var(--color-accent);
+    color: var(--color-text);
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+pre,
+code {
+    font-family: var(--font-code);
+}
+
+pre {
+    overflow-x: auto;
+}
+
+/* 공통 콘텐츠 너비: 데스크톱 1164px, 모바일 좌우 24px */
+.container {
+    width: min(1164px, calc(100% - 48px));
+    margin-inline: auto;
+}

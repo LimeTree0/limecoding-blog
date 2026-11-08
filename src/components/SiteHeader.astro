@@ -1,0 +1,44 @@
+<header class="site-header container">
+    <a class="site-name" href="/" aria-label="Limecoding 홈"> Limecoding</a>
+
+    <nav aria-label="메인 메뉴">
+        <a class="nav-link" href="/#posts">글</a>
+    </nav>
+</header>
+
+<style>
+    .site-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding-block: 32px;
+        border-bottom: 1px solid currentColor;
+    }
+
+    .site-name {
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.4;
+        text-decoration: none;
+    }
+
+    .nav-link {
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+    .nav-link:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .site-header {
+            padding-block: 24px;
+        }
+
+        .site-name {
+            font-size: 24px;
+        }
+    }
+</style>

@@ -29,24 +29,24 @@
 
 ## Task 1: Shared presentation
 
-- [ ] Update `src/styles/global.css`, `src/components/SiteHeader.astro`, and `src/layouts/BaseLayout.astro`; add a shared footer.
-- [ ] Use design tokens for palette, content widths, typography and spacing; retain keyboard focus and add a skip link.
-- [ ] Verify build, font loading, header/footer, and narrow-screen layout.
-- [ ] Commit: `feat: Figma 공통 스타일과 헤더 푸터 적용`.
+- [x] Update `src/styles/global.css`, `src/components/SiteHeader.astro`, and `src/layouts/BaseLayout.astro`; add a shared footer.
+- [x] Use design tokens for palette, content widths, typography and spacing; retain keyboard focus and add a skip link.
+- [x] Verify build, font loading, header/footer, and narrow-screen layout.
+- [x] Commit: `feat: Figma 공통 스타일과 헤더 푸터 적용`.
 
 ## Task 2: Home and article listing
 
-- [ ] Implement original hero artwork, reusable post list items, and the responsive home layout using real posts.
-- [ ] Connect article navigation and topic links to a real article index; retain the existing title, tags, summary and date data.
-- [ ] Adapt the reading-path slot to the two existing linked articles, with working links. Keep graph/search explicitly unavailable.
-- [ ] Verify local assets, mobile/desktop appearance, and all post links; build and commit: `feat(home): 시안 기반 홈과 글 목록 구현`.
+- [x] Implement original hero artwork, reusable post list items, and the responsive home layout using real posts.
+- [x] Connect article navigation and topic links to a real article index; retain the existing title, tags, summary and date data.
+- [x] Adapt the reading-path slot to the two existing linked articles, with working links. Keep graph/search explicitly unavailable.
+- [x] Verify local assets, mobile/desktop appearance, and all post links; build and commit: `feat(home): 시안 기반 홈과 글 목록 구현`.
 
 ## Task 3: Article reading
 
-- [ ] Style `src/pages/posts/[...id].astro` and MDX typography, tables, blockquotes, images, and code blocks.
-- [ ] Render a sticky desktop TOC and a mobile contents panel from MDX headings; implement accessible code-copy feedback.
-- [ ] Verify both articles, heading navigation, code copying, clipboard rejection, image layout and overflow; build.
-- [ ] Update scope/decision records to match the user's confirmed order; commit: `feat(post): 글 상세 스타일과 목차 코드 복사 구현`.
+- [x] Style `src/pages/posts/[...id].astro` and MDX typography, tables, blockquotes, images, and code blocks.
+- [x] Render a sticky desktop TOC and a mobile contents panel from MDX headings; implement accessible code-copy feedback.
+- [x] Verify both articles, heading navigation, code copying, clipboard rejection, image layout and overflow; build.
+- [x] Update scope/decision records to match the user's confirmed order; commit: `feat(post): 글 상세 스타일과 목차 코드 복사 구현`.
 
 ## Progress
 
@@ -55,3 +55,9 @@
 - Task 1 complete: build and browser checks passed at 1440, 390 and 320px; Google Fonts loaded. Commit `09e9979`.
 - Task 2 verification: article index initially returned 404 (expected failing check); now index, topic filter and browser Back pass. Home verified at 1440, 768, 390 and 320px, all seven visible illustration layers load with design geometry.
 - Scope adaptation: real sample posts replace Figma example text; search/graph controls are disabled and labeled as pending. The intro link targets the existing home introduction. The reading-path card follows the two existing linked MDX articles.
+
+- Task 2 complete: commit `97b10a1`; real MDX titles/tags/dates and original illustration assets retained.
+- Task 3 complete: build generates four static pages; both articles checked at 1440, 768, 390 and 320px. Heading targets, real clipboard copying, rejected clipboard feedback, horizontal code scrolling, large image containment and no-JavaScript reading passed against the production preview.
+- Final review: independent source review identified small-text contrast and mobile TOC DOM order. Browser reproduction showed 3.80:1 / incorrect order before correction, and 4.71:1 / correct order afterward. Both fixed; full home/article browser checks rerun successfully.
+- Final visual comparison: desktop/mobile screenshots inspected against Figma; actual article content changes page heights. All three font families loaded. No search or graph implementation, no remote publication.
+- Verification uses temporary Playwright tooling under ignored `node_modules/.cache/`; no application dependencies were added. Browser checks were run with Microsoft Edge; other browser engines were not checked.

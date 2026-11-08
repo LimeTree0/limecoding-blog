@@ -2,7 +2,8 @@
     --color-background: #f6f5ed;
     --color-surface: #eef0e5;
     --color-text: #233027;
-    --color-muted: #738071;
+    /* Darkened from Figma's #738071 for readable small text (WCAG AA). */
+    --color-muted: #647160;
     --color-line: #d8dbce;
     --color-accent: #b8e34b;
     --color-green: #739675;

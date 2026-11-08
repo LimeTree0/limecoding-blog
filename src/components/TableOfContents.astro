@@ -1,0 +1,38 @@
+---
+interface Props {
+    headings: { depth: number; slug: string; text: string }[];
+}
+const { headings } = Astro.props;
+const entries = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+---
+{entries.length > 0 && (
+    <nav class="toc" aria-label="이 글의 목차">
+        <h2><span class="desktop-title">ON THIS PAGE</span><span class="mobile-title">이 글에서 살펴볼 것</span></h2>
+        <ol>
+            {entries.map((heading) => (
+                <li class:list={[{ nested: heading.depth === 3 }]}>
+                    <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+            ))}
+        </ol>
+    </nav>
+)}
+<style>
+    .toc { position: sticky; top: 32px; align-self: start; max-height: calc(100vh - 64px); overflow-y: auto; }
+    h2 { margin-bottom: 16px; font: 400 12px/20px var(--font-body); }
+    ol { display: grid; gap: 20px; margin: 0; padding: 0; list-style: none; }
+    li { font-size: 13px; line-height: 23px; }
+    li.nested { padding-left: 16px; }
+    a { text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .mobile-title { display: none; }
+    @media (max-width: 1000px) {
+        .toc { position: static; max-height: none; padding: 16px; background: var(--color-surface); }
+        h2 { font-size: 20px; font-weight: 700; line-height: 32px; margin-bottom: 12px; }
+        .desktop-title { display: none; }
+        .mobile-title { display: inline; }
+        ol { gap: 0; counter-reset: contents; }
+        li { counter-increment: contents; }
+        li a::before { content: counter(contents, decimal-leading-zero) "  "; font-variant-numeric: tabular-nums; }
+    }
+</style>

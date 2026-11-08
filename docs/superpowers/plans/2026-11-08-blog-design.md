@@ -52,3 +52,6 @@
 
 - Baseline build: passed, 3 static pages. Existing home diff saved locally before editing.
 - User declined Code Connect mapping; existing Astro components will be adapted directly.
+- Task 1 complete: build and browser checks passed at 1440, 390 and 320px; Google Fonts loaded. Commit `09e9979`.
+- Task 2 verification: article index initially returned 404 (expected failing check); now index, topic filter and browser Back pass. Home verified at 1440, 768, 390 and 320px, all seven visible illustration layers load with design geometry.
+- Scope adaptation: real sample posts replace Figma example text; search/graph controls are disabled and labeled as pending. The intro link targets the existing home introduction. The reading-path card follows the two existing linked MDX articles.

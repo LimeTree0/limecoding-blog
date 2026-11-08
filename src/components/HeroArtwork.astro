@@ -1,0 +1,51 @@
+---
+// Original Figma assets, positioned in their 520×370 and 342×244 design frames.
+const desktop = [
+    { name: "orb-paper", x: 175, y: 25 },
+    { name: "orb-ink", x: 60, y: 52.0968 },
+    { name: "orb-lime", x: 250, y: 125 },
+    { name: "orb-orange", x: 387, y: 22 },
+    { name: "orbits", x: 18.4991, y: -20.3056 },
+    { name: "orbit-dots", x: 70, y: 115 },
+    { name: "chip", x: 242, y: 117 },
+];
+const mobile = [
+    { name: "orb-paper", x: 115.0962, y: 16.4865 },
+    { name: "orb-ink", x: 39.4615, y: 34.3557 },
+    { name: "orb-lime", x: 164.4231, y: 82.4324 },
+    { name: "orb-orange", x: 254.5269, y: 14.5081 },
+    { name: "orbits", x: 12.1667, y: -13.3907 },
+    { name: "orbit-dots", x: 46.0385, y: 75.8378 },
+    { name: "chip", x: 159.1615, y: 77.1568 },
+];
+---
+<div class="hero-art" aria-hidden="true">
+    <div class="art-frame desktop-art">
+        {desktop.map(({ name, x, y }) => <img src={`/images/design/${name}.svg`} alt="" style={`left:${x}px;top:${y}px`} />)}
+        <span class="code-line first">{"while (curious) {"}</span>
+        <span class="code-line second">explore();</span>
+        <span class="code-line last">{"}"}</span>
+        <span class="caption">FOLLOW THE CONNECTIONS ↗</span>
+    </div>
+    <div class="art-frame mobile-art">
+        {mobile.map(({ name, x, y }) => <img src={`/images/design/mobile-${name}.svg`} alt="" style={`left:${x}px;top:${y}px`} />)}
+    </div>
+</div>
+<style>
+    .hero-art { width: 100%; aspect-ratio: 520 / 370; container-type: inline-size; overflow: clip; }
+    .art-frame { position: relative; transform-origin: top left; }
+    .desktop-art { width: 520px; height: 370px; transform: scale(calc(100cqw / 520px)); }
+    .mobile-art { display: none; width: 342px; height: 244px; transform: scale(calc(100cqw / 342px)); }
+    img { position: absolute; max-width: none; }
+    .code-line, .caption { position: absolute; font-family: var(--font-code); white-space: nowrap; line-height: normal; }
+    .code-line { font-size: 14px; color: #d5e6bd; }
+    .first { left: 87px; top: 107px; transform: rotate(-12deg); }
+    .second { left: 102px; top: 145px; color: var(--color-accent); transform: rotate(-12deg); }
+    .last { left: 115px; top: 179px; }
+    .caption { left: 305px; top: 342px; font-size: 10px; color: var(--color-muted); }
+    @media (max-width: 600px) {
+        .hero-art { aspect-ratio: 342 / 244; }
+        .desktop-art { display: none; }
+        .mobile-art { display: block; }
+    }
+</style>

@@ -1,56 +1,70 @@
-# IT 기술 블로그 작업 지침
+# Repository Guidelines
 
-## 프로젝트 이해
+## Project Context
 
-이 프로젝트는 개인 기술 블로그를 만드는 프로젝트다. 글을 한 번 읽고 끝내는 대신, 관련 지식으로 이동하고 다시 찾아볼 수 있는 경험을 지향한다.
+Limecoding is a personal technology blog for reading articles, exploring related knowledge, and revisiting accumulated content. The user also values the experience of building with React directly.
 
-작업 전에 다음 문서를 읽는다.
+Read these documents before starting work:
 
-1. `docs/concept.md`: 목적과 서비스 방향
-2. `docs/features.md`: 초기 범위 제안과 향후 확장 구상
-3. `docs/decisions.md`: 확인된 방향, 제안, 미결정 사항
+1. [Concept](docs/concept.md): purpose and product direction
+2. [Features](docs/features.md): proposed initial scope and future ideas
+3. [Decisions](docs/decisions.md): confirmed directions, proposals, and open questions
+4. [Contributing](CONTRIBUTING.md): development, verification, and Git conventions
 
-## 판단 원칙
+Commit messages follow Conventional Commits 1.0.0, and the workflow is based on GitHub flow. Follow `CONTRIBUTING.md` for Korean commit descriptions, branch names, pull requests, and merge rules.
 
-- 사용자가 명시한 방향과 AI가 제안한 사항을 구분한다. 제안은 사용자 승인 없이 확정 사항으로 취급하지 않는다.
-- 기존 구현과 문서가 다르면 실제 상태를 확인하고 차이를 설명한다.
-- 아직 정하지 않은 기술이나 기능은 기존 코드와 요구사항을 확인한 뒤 선택한다. 중요한 범위 변경은 사용자와 논의한다.
-- 초기에는 글을 읽고 탐색하는 기본 경험을 우선한다. 그래프와 AI 기능을 미리 모두 구현하지 않는다.
-- 확장을 고려하되, 현재 필요하지 않은 서버·DB·관리 시스템을 선제적으로 추가하지 않는다.
-- 사용자는 React로 직접 개발하는 과정도 중요하게 생각한다.
+## Current Setup
 
-## 문서 유지
+- The Astro project lives at the repository root, with React and MDX integrations configured.
+- `src/pages/` contains pages, `public/` contains static assets, and `docs/` contains planning documents and decision records.
+- Use npm and `package-lock.json`. Check `package.json` for Node.js requirements and package versions.
+- TypeScript extends `astro/tsconfigs/strict` in `tsconfig.json`.
+- Content storage, deployment, testing, and linting tools remain undecided. The MDX integration does not imply an agreed content workflow.
 
-- 합의된 주요 결정과 이유는 `docs/decisions.md`에 반영한다.
-- 기능 범위가 바뀌면 `docs/features.md`를 함께 수정한다.
-- 제안 단계와 확정 단계를 명시한다. 과거 결정을 바꾸면 변경 이유를 남긴다.
-- 디자인을 구현할 때는 실제 Figma 화면이나 디자인 자료를 확인한다. 이 문서만으로 색상·타이포그래피·간격을 추정하지 않는다.
+## Decision and Implementation Principles
 
-## 구현과 검증
+- Distinguish explicit user direction from AI proposals. Silence does not turn a proposal into an approved decision.
+- When documentation differs from implementation, inspect the actual files and configuration and explain the discrepancy.
+- Check existing code and requirements before choosing unresolved technologies or features. Discuss significant scope changes with the user.
+- Prioritize reading and navigation in the initial version. Do not preemptively add graph or AI features, servers, databases, or administration systems that are not currently needed.
+- Inspect actual Figma screens or original design references before implementing designs. Do not infer colors, typography, or spacing from planning documents alone.
+- Follow the existing style of each edited file. Keep unrelated refactoring and whole-file formatting out of the requested change.
 
-- 개발·빌드·검증 명령은 저장소의 실제 설정을 확인한다. 현재 문서에는 스택과 명령이 확정되어 있지 않다.
-- 구현한 동작에 적절한 검증을 수행하고 결과와 확인하지 못한 부분을 보고한다.
-- 프레임워크와 패키지 버전, 배포 환경은 실제 선택 후 문서화한다.
+## Development and Verification
 
-## Development
+Run commands from the repository root. Check the current scripts in `package.json` before executing them.
 
-When starting the dev server, use background mode:
+| Command | Purpose |
+| --- | --- |
+| `npm ci` | Install dependencies from the lock file |
+| `npm run dev -- --background` | Start the development server in background mode |
+| `npm run astro -- dev status` | Check development server status |
+| `npm run astro -- dev logs` | Read development server logs |
+| `npm run astro -- dev stop` | Stop the development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview the build output |
 
-```
-astro dev --background
-```
+- For code or configuration changes, run the build and verification appropriate to the changed behavior. Check UI changes in a browser.
+- Test, lint, format-check scripts, and automated pre-commit checks are not currently configured. Do not run nonexistent commands or report a successful build as passing tests or a separate type check.
+- For documentation changes, review the content and referenced paths and run `git diff --check`.
+- Report what changed, which checks ran, and anything that could not be verified.
+- Do not commit secrets or generated directories such as `node_modules/`, `dist/`, and `.astro/`.
 
-Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
+## Documentation Maintenance
 
-## Documentation
+- Record agreed major decisions and their reasons in `docs/decisions.md`. Do not treat routine edits or every work item as a decision.
+- Distinguish user-confirmed decisions from implementation facts observed in the repository. Do not invent reasons for choices.
+- Update `docs/features.md` when feature scope changes. Mark proposals, confirmed decisions, and revisions clearly, and explain changes to earlier decisions.
+- Document frameworks, packages, and deployment environments after verifying the actual choices and configuration.
+- Include any related documentation updated as part of the request in the completion report.
 
-Full documentation: https://docs.astro.build
+## Official Astro Documentation
 
-Consult these guides before working on related tasks:
+Use the [official Astro documentation](https://docs.astro.build) to verify implementation guidance. Consult the relevant guides when working on these topics:
 
-- [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
-- [Working with Astro components](https://docs.astro.build/en/basics/astro-components/)
-- [Using React, Vue, Svelte, or other framework components](https://docs.astro.build/en/guides/framework-components/)
-- [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
-- [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
-- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+- [Pages, routing, and middleware](https://docs.astro.build/en/guides/routing/)
+- [Astro components](https://docs.astro.build/en/basics/astro-components/)
+- [React and other framework components](https://docs.astro.build/en/guides/framework-components/)
+- [Content collections](https://docs.astro.build/en/guides/content-collections/)
+- [Styling and Tailwind](https://docs.astro.build/en/guides/styling/)
+- [Internationalization](https://docs.astro.build/en/guides/internationalization/)

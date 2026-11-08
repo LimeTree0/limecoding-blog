@@ -7,7 +7,7 @@ const { post, compact = false } = Astro.props;
 <article class:list={["post-item", { compact }]}>
     <div class="cover" aria-hidden="true">
         <img src="/images/design/article-circuit.svg" width="128" height="80" alt="" loading="lazy" />
-        <span>CODE → CIRCUIT</span>
+        <span>CODE</span>
     </div>
     <div class="post-content">
         <p class="post-tags">{post.data.tags.join(" · ")}</p>

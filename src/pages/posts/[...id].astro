@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    const posts = await getCollection("posts", ({ data }) => !data.draft);
+
+    return posts.map((post) => ({
+        params: { id: post.id },
+        props: { post },
+    }));
+}
+
+interface Props {
+    post: CollectionEntry<"posts">;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout
+    title={`${post.data.title} | Limecoding`}
+    description={post.data.description}
+>
+    <a href="/">← 글 목록</a>
+
+    <main>
+        <header>
+            <h1>{post.data.title}</h1>
+            <p>{post.data.description}</p>
+            <time datetime={post.data.publishedAt.toISOString()}>
+                {
+                    post.data.publishedAt.toLocaleDateString("ko-KR", {
+                        timeZone: "UTC",
+                    })
+                }
+            </time>
+        </header>
+
+        <article>
+            <Content />
+        </article>
+    </main>
+</BaseLayout>

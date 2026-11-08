@@ -24,17 +24,17 @@
 
 | 타입 | 용도 | 예시 |
 | --- | --- | --- |
-| `feat` | 기능 추가 | `feat(chat): 응답 생성 중단 기능 추가` |
-| `fix` | 버그 수정 | `fix(chat): 스트리밍 메시지 중복 표시 수정` |
+| `feat` | 기능 추가 | `feat(search): 글 검색 기능 추가` |
+| `fix` | 버그 수정 | `fix(post): 본문 이미지 넘침 수정` |
 | `docs` | 문서 변경 | `docs: 개발 환경 실행 방법 추가` |
-| `refactor` | 기능 변경 없이 코드 구조 개선 | `refactor(chat): 스트리밍 처리 훅 분리` |
-| `perf` | 성능 개선 | `perf(chat): 메시지 목록 렌더링 최적화` |
-| `test` | 테스트 추가 및 수정 | `test(chat): 응답 취소 테스트 추가` |
-| `style` | 공백, 들여쓰기 등 코드 포맷 변경 | `style(backend): 코드 포맷 적용` |
-| `build` | 빌드 도구 및 의존성 변경 | `build(frontend): React와 Vite 초기 설정` |
-| `ci` | CI/CD 설정 변경 | `ci: 프론트엔드 빌드 검사 추가` |
+| `refactor` | 기능 변경 없이 코드 구조 개선 | `refactor(post): 글 메타데이터 표시 분리` |
+| `perf` | 성능 개선 | `perf: 홈 화면 이미지 로딩 개선` |
+| `test` | 테스트 추가 및 수정 | `test(search): 검색 결과 검증 추가` |
+| `style` | 공백, 들여쓰기 등 코드 포맷 변경 | `style: Astro 파일 들여쓰기 정리` |
+| `build` | 빌드 도구 및 의존성 변경 | `build: Astro 프로젝트 초기 설정` |
+| `ci` | CI/CD 설정 변경 | `ci: Astro 빌드 검사 추가` |
 | `chore` | 위 분류에 속하지 않는 유지보수 | `chore: gitignore 추가` |
-| `revert` | 기존 커밋 되돌리기 | `revert: 메시지 목록 가상화 적용 취소` |
+| `revert` | 기존 커밋 되돌리기 | `revert: 검색 정렬 변경 되돌리기` |
 
 `style`은 화면 디자인 변경을 뜻하지 않습니다. UI 변경은 목적에 따라 `feat` 또는 `fix` 등을 사용합니다.
 `feat`, `fix` 이외의 타입 목록은 Conventional Commits가 강제하는 목록이 아니라 프로젝트에서 선택한 분류입니다.
@@ -43,11 +43,11 @@
 
 변경 범위를 명확히 할 필요가 있을 때 사용합니다.
 
-- 영역: `frontend`, `backend`, `infra`
-- 기능: `chat`, `auth` 등 실제 기능 이름
+- 페이지·콘텐츠: `home`, `post` 등 실제 변경 대상
+- 기능: `search` 등 실제 기능 이름
 
-예를 들어 프론트엔드 빌드 설정은 `build(frontend)`, 채팅 기능 수정은 `fix(chat)`으로 작성합니다.
-여러 영역에 걸친 공통 변경은 scope를 생략할 수 있습니다.
+예를 들어 글 화면 수정은 `fix(post)`, 검색 기능 추가는 `feat(search)`로 작성합니다.
+Astro 초기 설정처럼 프로젝트 공통 변경은 scope를 생략할 수 있습니다. 현재 별도 `frontend/`, `backend/` 구조는 없습니다.
 
 ### 호환성을 깨는 변경
 
@@ -56,9 +56,9 @@
 공식 규격에서는 둘 중 하나로 표시할 수 있지만, 이 프로젝트에서는 설명을 남기기 위해 함께 사용합니다.
 
 ```text
-feat(api)!: 대화 목록 응답에 페이지 정보 추가
+feat(post)!: 글 주소 경로를 posts로 통일
 
-BREAKING CHANGE: 대화 목록 응답을 배열에서 items와 nextCursor를 가진 객체로 변경. 클라이언트는 items에서 목록을 읽도록 수정 필요.
+BREAKING CHANGE: 기존 글 URL이 변경되므로 이전 주소에 대한 리다이렉트 설정 필요
 ```
 
 ### 커밋 단위
@@ -82,9 +82,9 @@ BREAKING CHANGE: 대화 목록 응답을 배열에서 items와 nextCursor를 가
 이슈가 있으면 `<type>/<issue-number>-<short-description>` 형식도 사용할 수 있습니다.
 
 ```text
-build/frontend-setup
-feat/chat-streaming
-fix/42-duplicate-message
+build/astro-setup
+feat/post-list
+fix/42-post-image-overflow
 docs/git-convention
 ```
 
@@ -131,43 +131,48 @@ PR 본문에는 아래 내용을 기록합니다. UI 변경에는 필요에 따�
 `main`의 공유 이력은 강제 push로 덮어쓰지 않습니다. 병합한 변경을 취소할 때는 revert 커밋을 새 PR로 제출합니다.
 개인 작업 브랜치의 이력 정리가 필요하면 다른 사람이 사용 중인지 확인하고, 이미 push한 이력을 갱신할 때는 `--force-with-lease`를 사용합니다.
 
-## 들여쓰기와 줄바꿈
+## 프로젝트 구조
 
-- `.editorconfig`: UTF-8, 공백 2칸 들여쓰기, LF 줄바꿈, 파일 끝 개행을 사용합니다.
-- 줄 끝의 불필요한 공백을 제거합니다. Markdown은 공백 두 칸으로 표시하는 줄바꿈을 보존합니다.
-- `.gitattributes`: 텍스트 파일을 자동 판별해 저장소 전체에서 LF 줄바꿈을 사용합니다.
-- `frontend/.prettierrc.json`: 편집기 설정과 동일하게 공백 2칸과 LF를 사용합니다. 작은따옴표와 세미콜론 생략도 적용합니다.
+저장소 루트에서 Astro 프로젝트를 관리합니다. React와 MDX 연동이 `astro.config.mjs`에 설정되어 있으며, TypeScript는 `astro/tsconfigs/strict`를 사용합니다.
 
-에디터에서 EditorConfig 지원을 활성화하세요. VS Code는 EditorConfig 확장이 필요하며, IntelliJ IDEA와 WebStorm은 기본 지원합니다.
-설정 파일만 추가해도 기존 파일이 즉시 다시 저장되는 것은 아닙니다. 프론트엔드 포맷 수정은 `frontend/`에서 `npm run format`, 검사는 `npm run format:check`로 실행합니다.
+- `src/pages/`: 페이지와 라우트. 현재 시작 화면은 `index.astro`입니다.
+- `public/`: favicon 등 정적 파일.
+- `docs/`: 서비스 방향, 기능 제안, 결정 기록.
+- `astro.config.mjs`, `tsconfig.json`: Astro 연동 및 TypeScript 설정.
+- `package.json`, `package-lock.json`: 실행 명령과 의존성.
 
-## 커밋 전 자동 검사
+글 저장 위치, 콘텐츠 스키마, 공통 컴포넌트 구조는 아직 정하지 않았습니다. MDX 연동이 있다는 이유만으로 콘텐츠 운영 방식이 확정된 것으로 취급하지 않습니다.
 
-프론트엔드는 Husky의 `pre-commit` 훅에서 lint-staged를 실행합니다.
-스테이징한 `frontend/`의 JS·TS 파일에는 ESLint와 Prettier 검사를, JSON·CSS·HTML·Markdown·YAML 파일에는 Prettier 검사를 실행합니다.
-검사가 실패하면 커밋이 중단됩니다. 프론트엔드 검사 대상 파일이 없으면 검사를 건너뜁니다.
-커밋 단계에서는 타입 검사나 빌드를 실행하지 않습니다.
+## 개발 환경과 명령
 
-저장소를 받은 뒤 다음 명령으로 의존성과 훅을 설치합니다.
+`package.json`의 Node.js 요구 버전은 `>=22.23.4`입니다. npm을 사용하며, 모든 명령은 저장소 루트에서 실행합니다.
 
-```sh
-cd frontend
-npm ci
-```
+| 명령 | 용도 |
+| --- | --- |
+| `npm ci` | lock 파일 기준으로 의존성 설치 |
+| `npm run dev -- --background` | `AGENTS.md` 지침에 따라 개발 서버를 백그라운드로 실행 |
+| `npm run astro -- dev status` | 개발 서버 상태 확인 |
+| `npm run astro -- dev logs` | 개발 서버 로그 확인 |
+| `npm run astro -- dev stop` | 개발 서버 종료 |
+| `npm run build` | 배포용 사이트 빌드 |
+| `npm run preview` | 빌드 결과를 로컬에서 확인 |
+| `npm run astro -- --help` | Astro CLI 도움말 확인 |
 
-`prepare` 스크립트가 Git 훅을 자동 등록합니다. 이미 의존성을 설치했다면 `npm run prepare`로 다시 등록할 수 있습니다.
-훅은 `frontend/.husky/pre-commit`에서 관리하며, 생성되는 `.husky/_/` 내부 파일은 커밋하지 않습니다.
+의존성을 변경하면 `package.json`과 `package-lock.json`을 함께 커밋합니다. 배포 서비스와 운영 환경은 아직 정하지 않았습니다.
 
-훅에서 실행하는 ESLint와 Prettier 명령은 검사만 수행합니다. 포맷 수정은 `frontend/`에서 `npm run format`으로 실행한 뒤 변경 내용을 확인하고 스테이징합니다.
-Prettier는 두 칸 들여쓰기, 작은따옴표, 세미콜론 생략, LF 줄바꿈을 사용합니다.
-생성물, lock 파일, 정적 에셋은 `.prettierignore`로 제외합니다.
-부분 스테이징한 파일은 lint-staged가 미스테이징 변경을 임시로 숨긴 상태에서 검사하고 복원합니다.
+## 코드 작성과 검증
 
-전체 검사는 `frontend/`에서 `npm run check`로 실행합니다. ESLint → Prettier → TypeScript 검사와 Vite 빌드 순서입니다.
-훅 실행에는 Node.js와 npm이 필요하며, Windows에서는 Git for Windows의 셸을 사용합니다.
+- 수정하는 파일의 기존 들여쓰기, 따옴표, 세미콜론 스타일을 따릅니다. 기능 변경과 전체 파일 포맷 변경을 섞지 않습니다.
+- 현재 EditorConfig, Prettier, ESLint, Husky, lint-staged 설정은 없습니다. 포맷·린트·커밋 전 자동 검사가 구성되어 있다고 가정하지 않습니다.
+- 테스트 프레임워크, 테스트 스크립트, 커버리지 기준도 아직 없습니다. `npm test`, `npm run check`, `npm run format`은 현재 제공하지 않습니다.
+- 코드나 설정을 변경하면 `npm run build`를 실행하고, 변경한 화면과 동작을 브라우저에서 확인합니다. 빌드 통과를 별도 타입 검사나 테스트 통과로 보고하지 않습니다.
+- 화면 변경은 모바일·데스크톱에서 확인하고, 링크와 키보드 조작 등 해당 변경에 필요한 검증 결과를 남깁니다.
+- 문서만 수정한 경우 내용, 참조 경로, `git diff --check`를 확인합니다. 실행하지 못한 검증은 이유를 기록합니다.
 
-## 적용 범위
+디자인 구현 시 실제 Figma 화면이나 원본 자료를 확인합니다. 주요 결정과 이유는 `docs/decisions.md`에, 기능 범위 변경은 `docs/features.md`에 반영하며 제안과 확정을 구분합니다.
 
-로컬 변경 파일 검사는 Husky와 lint-staged로 구성합니다.
-CI, 브랜치 보호, 커밋 메시지 자동 검사는 아직 구성하지 않았으며 추후 개발 과정에서 추가합니다.
-기존 커밋 이력을 이 규칙에 맞추기 위해 소급해서 수정하지 않습니다.
+## 설정과 커밋 제외 대상
+
+비밀키와 실제 환경값이 담긴 `.env` 파일은 커밋하지 않습니다. 필요한 환경 설정 예시는 비밀값 없이 작성하고, 새 환경 파일을 만들 때는 `.gitignore` 적용 여부를 확인합니다.
+
+`node_modules/`, `dist/`, `.astro/`는 생성물이므로 커밋하지 않습니다. 기존 커밋 이력을 새 규칙에 맞추기 위해 소급 수정하지 않습니다.

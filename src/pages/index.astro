@@ -11,7 +11,19 @@ posts.sort(
 
 <BaseLayout title="Limecoding">
 	<main class="container">
-		<h1>Limecoding</h1>
+		<section class="hero" aria-labelledby="hero-title">
+			<p class="hero-label">LIMECODING / TECH & CURIOSITY</p>
+
+			<h1 id="hero-title">
+				이해하는 즐거움,<br />
+				연결하는 상상력.
+			</h1>
+
+			<p class="hero-description">
+				코드가 동작하는 원리를 탐구하고,<br />
+				기술 사이에서 발견한 연결을 기록합니다.
+			</p>
+		</section>
 
 		<ul id="posts">
 			{
@@ -27,3 +39,36 @@ posts.sort(
 		</ul>
 	</main>
 </BaseLayout>
+
+<style>
+	.hero {
+		padding-block: 80px;
+	}
+
+	.hero-label {
+		margin: 0 0 24px;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+	}
+
+	.hero h1 {
+		margin: 0;
+		font-size: clamp(32px, 4vw, 56px);
+		font-weight: 700;
+		line-height: 1.4;
+	}
+
+	.hero-description {
+		margin: 24px 0 0;
+		font-size: 16px;
+		line-height: 2;
+		word-break: keep-all;
+	}
+
+	@media (max-width: 600px) {
+		.hero {
+			padding-block: 48px;
+		}
+	}
+</style>

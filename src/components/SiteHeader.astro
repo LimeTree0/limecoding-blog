@@ -1,0 +1,58 @@
+<header class="site-header container">
+    <a class="site-name" href="/" aria-label="Limecoding 홈"><span>Lime</span>coding</a>
+    <nav aria-label="메인 메뉴">
+        <a href="/posts/">글</a>
+        <button type="button" disabled title="연결 탐색은 준비 중입니다" aria-label="연결 탐색 (준비 중)">연결 탐색</button>
+        <a href="/#hero-title">소개</a>
+        <button class="search" type="button" disabled title="검색은 준비 중입니다" aria-label="검색 (준비 중)">⌕</button>
+    </nav>
+</header>
+
+<style>
+    .site-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        padding-block: 48px 40px;
+        border-bottom: 1px solid var(--color-line);
+    }
+    .site-name {
+        position: relative;
+        isolation: isolate;
+        font-family: var(--font-heading);
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 44px;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+    .site-name span { position: relative; }
+    .site-name span::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: 18px -1px auto -2px;
+        height: 35px;
+        background: var(--color-accent);
+        transform: rotate(4deg);
+    }
+    nav { display: flex; align-items: baseline; gap: 32px; width: 300px; }
+    nav a, nav button {
+        border: 0;
+        padding: 0;
+        background: none;
+        font-size: 12px;
+        line-height: 20px;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+    nav a:hover { text-decoration: underline; }
+    nav button:disabled { cursor: not-allowed; }
+    nav .search { font-size: 15px; line-height: 27px; }
+    @media (max-width: 600px) {
+        .site-header { flex-direction: column; gap: 32px; padding-block: 24px 32px; }
+        nav { width: auto; max-width: 100%; gap: 24px; }
+        nav .search { line-height: 20px; }
+    }
+</style>

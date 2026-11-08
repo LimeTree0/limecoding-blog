@@ -1,46 +1,67 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import { formatDate, getPublishedPosts } from "../../lib/posts";
+import "../../styles/prose.css";
 
 export async function getStaticPaths() {
-    const posts = await getCollection("posts", ({ data }) => !data.draft);
-
-    return posts.map((post) => ({
-        params: { id: post.id },
-        props: { post },
-    }));
+    const posts = await getPublishedPosts();
+    return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
 }
-
-interface Props {
-    post: CollectionEntry<"posts">;
-}
-
+interface Props { post: CollectionEntry<"posts">; }
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 ---
-
-<BaseLayout
-    title={`${post.data.title} | Limecoding`}
-    description={post.data.description}
->
-    <a href="/">← 글 목록</a>
-
-    <main>
-        <header>
+<BaseLayout title={`${post.data.title} | Limecoding`} description={post.data.description}>
+    <main class="container article-page">
+        <header class="article-header">
+            <p class="breadcrumb"><a href="/posts/">← 모든 글</a><span aria-hidden="true"> / </span>{post.data.tags.join(" · ")}</p>
             <h1>{post.data.title}</h1>
-            <p>{post.data.description}</p>
-            <time datetime={post.data.publishedAt.toISOString()}>
-                {
-                    post.data.publishedAt.toLocaleDateString("ko-KR", {
-                        timeZone: "UTC",
-                    })
-                }
-            </time>
+            <p class="article-meta">
+                Limecoding · <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+                {post.data.updatedAt && <span> · 수정 <time datetime={post.data.updatedAt.toISOString()}>{formatDate(post.data.updatedAt)}</time></span>}
+            </p>
         </header>
-
-        <article>
-            <Content />
-        </article>
+        <div class="reading-layout">
+            <TableOfContents headings={headings} />
+            <div class="article-content">
+                <article class="prose" aria-label={post.data.title}><Content /></article>
+                <nav class="post-tags" aria-label="글의 태그">
+                    {post.data.tags.map((tag) => <a href={`/posts/?tag=${encodeURIComponent(tag)}`}># {tag}</a>)}
+                </nav>
+            </div>
+        </div>
     </main>
 </BaseLayout>
+<script>
+    import { enhanceCodeBlocks } from "../../scripts/code-copy";
+    enhanceCodeBlocks();
+</script>
+<style>
+    .article-page { padding-top: 40px; }
+    .article-header { display: grid; gap: 40px; margin-bottom: 40px; }
+    .breadcrumb, .article-meta { font-size: 12px; line-height: 20px; }
+    .breadcrumb a { text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb span { margin-inline: 8px; }
+    h1 { max-width: 950px; font-size: 40px; line-height: 58px; }
+    .reading-layout { display: grid; grid-template-columns: minmax(0, 850px) minmax(0, 200px); align-items: start; gap: 64px; }
+    .article-content { min-width: 0; grid-column: 1; grid-row: 1; }
+    .reading-layout :global(.toc) { grid-column: 2; grid-row: 1; }
+    .post-tags { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 24px; font-size: 12px; line-height: 20px; }
+    .post-tags a { text-decoration: none; }
+    .post-tags a:hover { text-decoration: underline; }
+    @media (max-width: 1000px) {
+        .reading-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+        .reading-layout :global(.toc) { grid-column: 1; grid-row: 1; }
+        .article-content { grid-row: auto; }
+    }
+    @media (max-width: 600px) {
+        .article-page { padding-top: 24px; }
+        .article-header { gap: 24px; margin-bottom: 24px; }
+        .breadcrumb, .article-meta { color: var(--color-muted); }
+        h1 { font-size: 28px; line-height: 42px; }
+    }
+</style>

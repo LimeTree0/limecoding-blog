@@ -1,0 +1,68 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostListItem from "../../components/PostListItem.astro";
+import { getPublishedPosts } from "../../lib/posts";
+const posts = await getPublishedPosts();
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+---
+<BaseLayout title="모든 글 | Limecoding">
+    <main class="container notes">
+        <header class="intro">
+            <p class="label">THE NOTES</p>
+            <h1>하나씩, 깊이 들여다보기.</h1>
+            <p>만들며 배운 것과 원리를 따라가며 발견한 연결을 기록합니다.</p>
+        </header>
+        <div class="filters" role="group" aria-label="주제별 글 필터">
+            <button class="pill" data-topic="" aria-pressed="true">전체</button>
+            {tags.map((tag) => <button class="pill" data-topic={tag} aria-pressed="false">{tag}</button>)}
+        </div>
+        <p class="count" role="status" aria-live="polite">{posts.length}개의 글 · 최신순</p>
+        <ul class="post-list">
+            {posts.map((post) => <li data-post-item data-tags={JSON.stringify(post.data.tags)}><PostListItem post={post} /></li>)}
+        </ul>
+        {posts.length === 0 && <p>첫 번째 글을 준비하고 있습니다.</p>}
+    </main>
+</BaseLayout>
+<script>
+    const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-topic]")];
+    const items = [...document.querySelectorAll<HTMLElement>("[data-post-item]")];
+    const count = document.querySelector<HTMLElement>(".count");
+    function filterPosts(requested: string) {
+        const topic = buttons.some((button) => button.dataset.topic === requested) ? requested : "";
+        let visible = 0;
+        for (const item of items) {
+            const tags: string[] = JSON.parse(item.dataset.tags ?? "[]");
+            item.hidden = topic !== "" && !tags.includes(topic);
+            if (!item.hidden) visible++;
+        }
+        for (const button of buttons) button.setAttribute("aria-pressed", String(button.dataset.topic === topic));
+        if (count) count.textContent = `${visible}개의 글 · 최신순`;
+    }
+    for (const button of buttons) button.addEventListener("click", () => {
+        const topic = button.dataset.topic ?? "";
+        const url = new URL(window.location.href);
+        if (topic) url.searchParams.set("tag", topic);
+        else url.searchParams.delete("tag");
+        history.pushState(null, "", url);
+        filterPosts(topic);
+    });
+    function syncFromUrl() { filterPosts(new URLSearchParams(location.search).get("tag") ?? ""); }
+    window.addEventListener("popstate", syncFromUrl);
+    syncFromUrl();
+</script>
+<style>
+    .notes { padding-top: 40px; }
+    .intro { display: grid; gap: 40px; margin-bottom: 40px; }
+    .label, .count { font-size: 12px; line-height: 20px; }
+    h1 { font-size: 40px; line-height: 58px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+    .count { margin-bottom: 24px; color: var(--color-muted); }
+    .post-list { max-width: var(--width-article); display: grid; gap: 40px; list-style: none; margin: 0; padding: 0; }
+    @media (max-width: 600px) {
+        .notes { padding-top: 24px; }
+        .intro { gap: 24px; margin-bottom: 24px; }
+        h1 { font-size: 28px; line-height: 42px; }
+        .filters { gap: 8px; margin-bottom: 24px; }
+        .post-list { gap: 24px; }
+    }
+</style>

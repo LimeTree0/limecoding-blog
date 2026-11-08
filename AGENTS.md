@@ -31,3 +31,26 @@
 - 개발·빌드·검증 명령은 저장소의 실제 설정을 확인한다. 현재 문서에는 스택과 명령이 확정되어 있지 않다.
 - 구현한 동작에 적절한 검증을 수행하고 결과와 확인하지 못한 부분을 보고한다.
 - 프레임워크와 패키지 버전, 배포 환경은 실제 선택 후 문서화한다.
+
+## Development
+
+When starting the dev server, use background mode:
+
+```
+astro dev --background
+```
+
+Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
+
+## Documentation
+
+Full documentation: https://docs.astro.build
+
+Consult these guides before working on related tasks:
+
+- [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
+- [Working with Astro components](https://docs.astro.build/en/basics/astro-components/)
+- [Using React, Vue, Svelte, or other framework components](https://docs.astro.build/en/guides/framework-components/)
+- [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
+- [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
+- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
